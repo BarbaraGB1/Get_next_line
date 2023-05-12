@@ -9,6 +9,7 @@
 /*   Updated: 2023/05/12 13:40:55 by bargarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
