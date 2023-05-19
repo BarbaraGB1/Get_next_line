@@ -6,17 +6,11 @@
 /*   By: bargarci <bargarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 13:43:29 by bargarci          #+#    #+#             */
-/*   Updated: 2023/05/12 13:43:38 by bargarci         ###   ########.fr       */
+/*   Updated: 2023/05/18 17:29:45 by bargarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 char	*ft_new_line(char *s)
 {
@@ -76,7 +70,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*rest[OPEN_MAX];
 	char		*buffer;
 	int			nbyts;
 	char		*new_line;
@@ -87,20 +81,20 @@ char	*get_next_line(int fd)
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (0);
-	while (!ft_count(rest) && nbyts != 0)
+	while (!ft_count(rest[fd]) && nbyts != 0)
 	{
 		nbyts = read(fd, buffer, BUFFER_SIZE);
 		if (nbyts == -1)
-			return (free(buffer), free(rest), rest = NULL, NULL);
+			return (free(buffer), free(rest[fd]), rest[fd] = NULL, NULL);
 		buffer[nbyts] = '\0';
-		rest = ft_strjoin(rest, buffer);
+		rest[fd] = ft_strjoin(rest[fd], buffer);
 	}
 	free (buffer);
-	if (rest && rest[0] == '\0')
-		return (free(rest), rest = NULL, NULL);
-	return (new_line = ft_new_line(rest), rest = garbage(rest), new_line);
+	if (rest[fd] && rest[fd][0] == '\0')
+		return (free(rest[fd]), rest[fd] = NULL, NULL);
+		new_line = ft_new_line(rest[fd]);
+	return (rest[fd] = garbage(rest[fd]), new_line);
 }
-
 /*void	leaks(void)
 {
 	system("leaks a.out");
@@ -108,23 +102,37 @@ char	*get_next_line(int fd)
 
 int	main(void)
 {
-	int		fd;
-	char	*line;
-	int		i;
+	int		fd1;
+	int		fd2;
+	int		fd3;
+	char	*line1;
+	char	*line2;
+	char	*line3;
 
-	i = 0;
-	atexit(leaks);
-	fd = open("emptyt.txt", O_RDONLY);
-	if (fd < 0)
-		return (0);
-	while (1)
+	// atexit(leaks);
+	
+	fd1 = open("null", O_RDONLY);
+	fd2 = open("read.txt", O_RDONLY);
+	fd3 = open("que.txt", O_RDONLY);
+	
+	printf("%s", get_next_line(fd1));
+	printf("%s", get_next_line(fd2));
+	printf("%s", get_next_line(fd3));
+
+	while ((line1 = get_next_line(fd1)) 
+	|| (line2 = get_next_line(fd2)) || (line3 = get_next_line(fd3)))
 	{
-		line = get_next_line(fd);
-		if (line == NULL)
+		// line = get_next_line(fd);
+		if (line1 == NULL && line2 == NULL && line3 == NULL)
 			break ;
-		printf("%s", line);
-		free(line);
-		i++;
+		printf("%s", line1);
+		printf("%s", line2);
+		printf("%s", line3);
+		free(line1);
+		free(line2);
+		free(line3);
 	}
-	close(fd);
+	close(fd1);
+	close(fd2);
+	close(fd3);
 }*/

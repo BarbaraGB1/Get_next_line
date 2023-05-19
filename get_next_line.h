@@ -21,7 +21,7 @@
 # include <sys/types.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 5
 # endif
 
 char	*get_next_line(int fd);
@@ -31,4 +31,5 @@ int		ft_strlen(const char *s);
 char	*ft_new_line(char *s);
 char	*ft_substr(char const *s, size_t start, size_t len);
 char	*garbage(char *rest);
+
 #endif

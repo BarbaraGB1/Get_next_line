@@ -38,9 +38,7 @@ char	*ft_new_line(char *s)
 	while (s[++i] != '\n' && s[i] != '\0')
 		new[i] = s[i];
 	if (s[i] == '\n')
-	{
 		new[i++] = '\n';
-	}
 	new[i] = '\0';
 	return (new);
 }
@@ -76,7 +74,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*rest;	
 	char		*buffer;
 	int			nbyts;
 	char		*new_line;
@@ -113,8 +111,8 @@ int	main(void)
 	int		i;
 
 	i = 0;
-	atexit(leaks);
-	fd = open("emptyt.txt", O_RDONLY);
+	//atexit(leaks);
+	fd = open("null", O_RDONLY);
 	if (fd < 0)
 		return (0);
 	while (1)
